@@ -1,0 +1,485 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%% Simple LaTeX CV Template %%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% NOTE: If you find that it says                                     %%
+%%                                                                    %%
+%%                           1 of ??                                  %%
+%%                                                                    %%
+%% at the bottom of your first page, this means that the AUX file     %%
+%% was not available when you ran LaTeX on this source. Simply RERUN  %%
+%% LaTeX to get the ``??'' replaced with the number of the last page  %%
+%% of the document. The AUX file will be generated on the first run   %%
+%% of LaTeX and used on the second run to fill in all of the          %%
+%% references.                                                        %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% Document Setup %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Don't like 10pt? Try 11pt or 12pt
+\documentclass[10pt]{article}
+
+% This is a helpful package that puts math inside length specifications
+\usepackage{calc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb}
+\usepackage{hyperref}
+
+
+% Simpler bibsection for CV sections
+% (thanks to natbib for inspiration)
+\makeatletter
+\newlength{\bibhang}
+\setlength{\bibhang}{1em}
+\newlength{\bibsep}
+{\@listi \global\bibsep\itemsep \global\advance\bibsep by\parsep}
+\newenvironment{bibsection}
+{\minipage[t]{\linewidth}\list{}{%
+		\setlength{\leftmargin}{\bibhang}%
+		\setlength{\itemindent}{-\leftmargin}%
+		\setlength{\itemsep}{\bibsep}%
+		\setlength{\parsep}{\z@}%
+}}
+{\endlist\endminipage}
+\makeatother
+
+% Layout: Puts the section titles on left side of page
+\reversemarginpar
+
+%
+%         PAPER SIZE, PAGE NUMBER, AND DOCUMENT LAYOUT NOTES:
+%
+% The next \usepackage line changes the layout for CV style section
+% headings as marginal notes. It also sets up the paper size as either
+% letter or A4. By default, letter was used. If A4 paper is desired,
+% comment out the letterpaper lines and uncomment the a4paper lines.
+%
+% As you can see, the margin widths and section title widths can be
+% easily adjusted.
+%
+% ALSO: Notice that the includefoot option can be commented OUT in order
+% to put the PAGE NUMBER *IN* the bottom margin. This will make the
+% effective text area larger.
+%
+% IF YOU WISH TO REMOVE THE ``of LASTPAGE'' next to each page number,
+% see the note about the +LP and -LP lines below. Comment out the +LP
+% and uncomment the -LP.
+%
+% IF YOU WISH TO REMOVE PAGE NUMBERS, be sure that the includefoot line
+% is uncommented and ALSO uncomment the \pagestyle{empty} a few lines
+% below.
+%
+
+%% Use these lines for letter-sized paper
+\usepackage[paper=letterpaper,
+%includefoot, % Uncomment to put page number above margin
+marginparwidth=.9in,     % Length of section titles
+marginparsep=.05in,       % Space between titles and text
+margin=.7in,               % 1 inch margins
+includemp]{geometry}
+
+%% Use these lines for A4-sized paper
+%\usepackage[paper=a4paper,
+%            %includefoot, % Uncomment to put page number above margin
+%            marginparwidth=30.5mm,    % Length of section titles
+%            marginparsep=1.5mm,       % Space between titles and text
+%            margin=25mm,              % 25mm margins
+%            includemp]{geometry}
+
+%% More layout: Get rid of indenting throughout entire document
+\setlength{\parindent}{0in}
+
+%% This gives us fun enumeration environments. compactitem will be nice.
+\usepackage{paralist}
+
+%% Reference the last page in the page number
+%
+% NOTE: comment the +LP line and uncomment the -LP line to have page
+%       numbers without the ``of ##'' last page reference)
+%
+% NOTE: uncomment the \pagestyle{empty} line to get rid of all page
+%       numbers (make sure includefoot is commented out above)
+%
+\usepackage{fancyhdr,lastpage}
+\pagestyle{fancy}
+%\pagestyle{empty}      % Uncomment this to get rid of page numbers
+\fancyhf{}\renewcommand{\headrulewidth}{0pt}
+\fancyfootoffset{\marginparsep+\marginparwidth}
+\newlength{\footpageshift}
+\setlength{\footpageshift}
+{0.5\textwidth+0.5\marginparsep+0.5\marginparwidth-2in}
+\lfoot{\hspace{\footpageshift}%
+	\parbox{4in}{\, \hfill %
+		\arabic{page} of \protect\pageref*{LastPage} % +LP
+		%                    \arabic{page}                               % -LP
+		\hfill \,}}
+
+% Finally, give us PDF bookmarks
+\usepackage{color,hyperref}
+\definecolor{darkblue}{rgb}{0.0,0.0,0.3}
+\hypersetup{colorlinks,breaklinks,
+	linkcolor=darkblue,urlcolor=darkblue,
+	anchorcolor=darkblue,citecolor=darkblue}
+
+%%%%%%%%%%%%%%%%%%%%%%%% End Document Setup %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%% Helper Commands %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% The title (name) with a horizontal rule under it
+%
+% Usage: \makeheading{name}
+%
+% Place at top of document. It should be the first thing.
+\newcommand{\makeheading}[1]%
+{\hspace*{-\marginparsep minus \marginparwidth}%
+	\begin{minipage}[t]{\textwidth+\marginparwidth+\marginparsep}%
+		{\large \bfseries #1}\\[-0.15\baselineskip]%
+		\rule{\columnwidth}{1pt}%
+\end{minipage}}
+
+% The section headings
+%
+% Usage: \section{section name}
+%
+% Follow this section IMMEDIATELY with the first line of the section
+% text. Do not put whitespace in between. That is, do this:
+%
+%       \section{My Information}
+%       Here is my information.
+%
+% and NOT this:
+%
+%       \section{My Information}
+%
+%       Here is my information.
+%
+% Otherwise the top of the section header will not line up with the top
+% of the section. Of course, using a single comment character (%) on
+% empty lines allows for the function of the first example with the
+% readability of the second example.
+\renewcommand{\section}[2]%
+{\pagebreak[2]\vspace{1.3\baselineskip}%
+	\phantomsection\addcontentsline{toc}{section}{#1}%
+	\hspace{0in}%
+	\marginpar{
+		\raggedright \scshape #1}#2}
+
+% An itemize-style list with lots of space between items
+\newenvironment{outerlist}[1][\enskip\textbullet]%
+{\begin{itemize}[#1]}{\end{itemize}%
+	\vspace{-.6\baselineskip}}
+
+% An environment IDENTICAL to outerlist that has better pre-list spacing
+% when used as the first thing in a \section
+\newenvironment{lonelist}[1][\enskip\textbullet]%
+{\vspace{-\baselineskip}\begin{list}{#1}{%
+			\setlength{\partopsep}{0pt}%
+			\setlength{\topsep}{0pt}}}
+	{\end{list}\vspace{-.6\baselineskip}}
+
+% An itemize-style list with little space between items
+\newenvironment{innerlist}[1][\enskip\textbullet]%
+{\begin{compactitem}[#1]}{\end{compactitem}}
+
+% To add some paragraph space between lines.
+% This also tells LaTeX to preferably break a page on one of these gaps
+% if there is a needed pagebreak nearby.
+\newcommand{\blankline}{\quad\pagebreak[2]}
+
+%--- Ignore what follows
+\newcommand{\Ignore}[1]{}
+
+% 
+
+%%%%%%%%%%%%%%%%%%%%%%%% End Helper Commands %%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%% Begin CV Document %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+	\makeheading{Llohann Dallagnol Speran\c ca}
+	
+	\section{Address}
+	%
+	% NOTE: Mind where the & separators and \\ breaks are in the following
+	%       table.
+	%
+	% ALSO: \rcollength is the width of the right column of the table
+	%       (adjust it to your liking; default is 1.85in).
+	%
+	
+	%--- Move two lines up then add contact info; this is a bit of a hack; also might want to move up a bit more
+	%\vspace{-2em}
+	
+	
+	%
+	% NOTE: Mind where the & separators and \\ breaks are in the following
+	%       table.
+	%
+	% ALSO: \rcollength is the width of the right column of the table
+	%       (adjust it to your liking; default is 1.85in).
+	%
+	
+	%--- Move two lines up then add contact info; this is a bit of a hack; also might want to move up a bit more
+	\vspace{-2em}
+	\begin{tabbing}
+		Federal University of São Paulo xxxxxxxxxxxxxxl \= \kill
+		%\href{http://www.ime.unicamp.br/}
+		  
+		%\href{http://www.unicamp.br/unicamp/}
+		{Piazza della Liassa, 7} 
+		\> \textit{Cell:} +39 351 651 8710 \\
+		 {Cabella Ligure (AL)} \> \textit{E-mail:} {lsperanca@gmail.com} \\
+		15060, IT          \>  \textit{Nationality:} Brazilian, Italian \\
+		  \href{https://github.com/llohann-speranca}{\bf GitHub} \> \href{https://scholar.google.com.br/citations?hl=pt-BR&user=6eG8d3kAAAAJ&view_op=list_works&gmla=AJsN-F6-AJnmRvPpAUhB4kL_EeaC-aGUL4lLqPZWGk1VlmYZDLqvTj-Op03oOoVo_6TfUshazfkcEfRJDjk72HabsrYpw7kj08WRkdfO1Xp3lrT_EyR6Irk}{{\bf Google Scholar}}
+	\end{tabbing}
+	
+	
+	\vspace{-1em}
+	
+	\rule{\columnwidth}{.5pt}%
+	
+	\vspace{-1em}
+	
+	
+	\section{Education}
+	%
+%	\vspace{-0.5em}
+	I had my education in 	\href{http://ime.unicamp.br/}{\textbf{State University of Campinas}}, one of the best universities in Latin America and second best in Brazil. Its rank in Mathematics is higher than of the well-known premier Rice University, Queen Mary University London, University of Bologna and Politecnico di Torino.
+	It is also comparable to the ones of Tel-Aviv University, Boston University and Frei Universit\"at Berlin. 
+	
+	Although The State University of Campinas does not award distinctions, at the completion  of my Bachelor's and Master's studies, I was offered an scholarship to continue my graduation in the same university, without even taking part in selection processes.
+	
+	\vspace{0.5em}
+	
+
+	\vspace{-0.5em}
+	%\blankline
+	\begin{outerlist}
+		
+		\item[] \textbf{Ph.D.,
+			\href{http://www.ime.unicamp.br/}
+			{Mathematics}},
+		18/05/2012, Grade 4.0 out of 4.0
+		\begin{innerlist} \vspace{-0.4em}
+			
+			\item[] Thesis Title: \emph{Geometry and Topology of Cobordisms}
+			\item[] Advisor:
+			\href{http://lattes.cnpq.br/2287909020835559}
+			{Professor Carlos Durán} and Professor Alcibiades Rigas         \end{innerlist}
+		
+		%\blankline
+		\vspace{-0.3em}
+		
+		\item[]\textbf{M.S.,
+			\href{http://www.ime.unicamp.br/}
+			{Mathematics}}, 16/09/2009, Grade 3.8 out of 4.0
+		\begin{innerlist}\vspace{-0.4em}
+			
+			\item[] Dissertation Title: \emph{Exotic Phenomena in Geometry and Topology}
+			\item[] Advisor:
+			\href{http://lattes.cnpq.br/2287909020835559}
+			{Professor Carlos Durán} 
+		\end{innerlist}
+		
+		%\blankline
+		\vspace{-0.3em}
+		
+		\item[] \textbf{B.S.,
+			\href{http://www.ime.unicamp.br/}
+			{Mathematics}}, 07/12/2007
+	\end{outerlist}
+	
+	
+	
+	
+	
+	\rule{\columnwidth}{.5pt}%
+	
+	\vspace{-1em}
+	
+	\section{Positions}
+	
+	
+	\vspace{-1em}
+	
+	After my studies I setpped in an early permanent position, resulting in 10 years of experience in:
+	\begin{innerlist}[-]
+ \item teamwork, both inside the institute and international collaboration;
+ \item administrative and decision making skills, being part of the Advisory  and Consceling boards of Programs and Institutes;
+ \item project management;
+ \item public speak and adaptive communication skills, in order to reach different publics, either by teaching, research lectures or outreach activities;
+\item human management, as an extremely well succeed supervisor (see below) and
+a frequent member in the Entrance Selection Committee  in the Graduation Program.
+		\end{innerlist}	
+	\vspace{1em}
+	%	\item[]
+	\textbf{Tenured Assistant professor } at the {Federal University of São Paulo},  \hfill From 02/2017 to 04/2022\\São José dos Campos, São Paulo, Brazil
+	
+	\textbf{Tenured Assistant professor } at the {Federal University of Paraná}, \hfill From 03/2014 to 02/2017\\ Curitiba, Paraná, Brazil
+	
+	\textbf{Postdoctoral Researcher} at the State University of Campinas\hfill From 03/2013 to 02/2014\\
+	Advisor: Luiz B. San Martin. Campinas, Brazil
+	\blankline
+	
+	
+	\rule{\columnwidth}{.5pt}%
+	
+	\vspace{-1em}
+	
+	
+	
+	\section{Courses and Specializations}
+	\vspace{-0.5em}
+	
+	More recently, I have been acquiring new skills, by learning coding and Finances. Right now I am already capable to manipulate and interact with data. Some projects will be added to my portifolio soon.
+	
+%	\begin{outerlist}
+%		\item Courses:
+		\begin{innerlist}[-]
+			\item \textbf{Introduction to SQL} --  Codecademy
+			\item \textbf{Learn Python3}  -- Codecademy
+			\item \textbf{Analyze Financial Data with Python} -- Codecademy
+						\item \textbf{Learn Data Analysis with Pandas} -- Codecademy
+			\item \textbf{Fundamentals of Quantitative Modeling} -- Wharton (UPenn)
+			\item \textbf{Introduction to Data Science in Python} -- University of Michigan
+			%		\item \textbf{Introduction to Financial Engineering and Risk Management} %-- Coursera
+
+			%		\item \textbf{Introduction to Portifolio Construction and Analysis with Python}
+		\end{innerlist}
+		
+		
+%	\end{outerlist}
+
+
+\rule{\columnwidth}{.5pt}%
+
+\vspace{-0.5em}
+
+
+	
+	\section{Selected articles}  \vspace{-1.8em}
+	
+	I have been a recognized both as a creative researcher in my main area of specialization (Geometry) and a problem solver in other areas. For several times I brought ideas from other areas, or developed new machinery, to approach different questions. My ample range of interest is also an evidence of my fast-learning and adaptation capacities.
+		\begin{innerlist}[-]
+		\item  e Silva, R. J. M., Sperança, L. D. \href{https://ems.press/journals/rmi/articles/1567309}{On the completeness of dual foliations on nonnegatively curved symmetric spaces}, Published ahead of print in \textit{Revista Matematica Iberoamericana (2021)}.
+
+
+		\item Blinovsky, V., Sperança, L. D.
+		Brouwer's Conjecture for odd number of vertices. In preparation
+
+
+		
+					\item Sperança L. D. \href{https://link.springer.com/article/10.1007/s00013-011-0317-3}{A note on the degree of symmetry of exotic spheres}. {\textit{Archiv der Mathematik (Printed ed.)},  v. 97, p. 495-497, 2011}.
+%		\vspace{.1 in}  	  
+		
+		
+		
+		
+		\item Sperança, L. D. \href{https://arxiv.org/abs/1703.09577}{Totally Geodesic Riemannian Foliations on Compact Lie Groups}, \textit{{arxiv:1703.09577}}, submitted to  American Journal of Mathematics in July 2020
+		
+		
+		\item Sperança, L. D. \href{https://link.springer.com/article/10.1007/s12220-017-9901-5}{On Riemannian foliations over positively curved manifolds}. {\textit{The Journal of Geometric Analysis}, v. 28(3), p. 2206-2224, 2017}.
+		
+		\item Sperança, L. D., Weil, S.  \href{https://link.springer.com/article/10.1007/s00209-019-02425-3}{The metric foliations on Euclidean spaces}. \textit{Math. Z.} 295, 1295–1299 2020.
+		
+		
+
+\end{innerlist}
+	
+	
+%	\vspace{-1em}
+	
+	
+	
+	
+	
+	\rule{\columnwidth}{.4pt}%
+	
+	
+	\vspace{-1em}
+	\section{Selected Projects}
+	
+	
+	
+	\vspace{-1em}
+	
+%	Apart from individual research projects, I managed international collaborations, scientific and training events. The project list includes the award of a competitive Universal Call, aong all areas of science and a relatively high-paid  (for Brazilian standards) research abroad fellowship.
+	
+	\vspace{0.5em}
+	\begin{innerlist}[-]
+		
+	
+\item 	`\textbf{Classification and global properties of Riemannian foliations}', Fapesp Grant for Research Abroad 2017/19657-0, \$42,000,  05/2018-02/2019
+	
+	
+\item 	`\textbf{Geometry and topology under positive/nonnegative sectional curvature}', Fapesp Research Grant  2017/10892-7,  08/2017-04/2018
+	
+		\item 
+Head  organizer of the \href{http://www.matematica.ufpr.br/old/verao/2017/m4_geometria.html}{'\textbf{V Geometry Symposium}'} -- Federal University of Paraná 02/2017.  Funding: CAPES PROAC. 
+	\item Head organizer of the \href{http://www.matematica.ufpr.br/old/verao/2015/m4_geometria.html}{'\textbf{III Geometry Symposium}'} -- Federal University of Paraná 02/2015. Funding: CNPq, CAPES.
+\item  Head organizer of the \href{https://geometriatopologiaufpr.wordpress.com/programa-avancado-de-verao-em-geometria/}{`\textbf{Advanced Program in Geometry}'} -- Federal University of Paraná 01/2015-02/2015. Funding: CAPES, CNPq ,  PCDP, Fundação Araucária. 
+	\end{innerlist}
+	
+	
+	\rule{\columnwidth}{.5pt}%
+	
+	\vspace{-1em}
+	
+	
+	
+	\section{Prizes, Awards, fellowships}
+	
+	\vspace{-1em}
+	
+	
+	
+	In addition, I was awarded premier studies fellowships, since my undergrad. Likewise, I was awarded a Bronze Medal for relating a pattern to in a well-known Particle Physicis equation to a classical theory in Complex Analysis. More recently, the combination of  my first PhD student's capacities and my supervision made his thesis the best thesis defended in Brazil in the year of 2020.
+	
+	\vspace{0.5cm}
+	
+	\begin{innerlist}[-]
+		\item \textbf{Capes Thesis Award in Mathematics 2021} and \textbf{Gutierrez Prize 2021}, for the thesis of Leonardo Cavenaghi. These are the two prizes granted to the best thesis in Mathematics defended in the previous year.
+		
+		
+		\item \textbf{Bronze Medal} for the work `Geometric Aspects in Gauge Theory' -- III Journey  on Scientific Initiation, IMPA, Rio de Janeiro, 2006
+		
+		
+		
+		
+	\end{innerlist}
+	
+	
+	
+	
+	
+	\rule{\columnwidth}{.3pt}%
+	\section{Communication skills}
+%	\vspace{-1em}
+	
+	During my years in academy I took part in many conferences and outreach events, in addition to the usual teaching load and relationship with students and university staff.
+	
+\begin{innerlist}[-]
+\item 		My research work was presented in more than 30 occasions, for different publics, including invited lectures in important conferences;
+
+\item Apart from that, 
+	I have taught in three universities, on a variety of courses and student's backgrounds: from PhD courses in Geometry to Freshman's STEM courses; from Math-Olympics medalists to students with poor educational background (please find a list below).
+	Advanced Linear Algebra (graduation),	Calculus, Calculus in multiple variables, Linear Algebra,  Differential Geometry (Math major), Algebraic Topology (Math major), Topics in Geometry (Math Major), Ordinary Differential Equations (graduation and math major), Geometry and Topology (PhD),	  Metric Spaces (Math major), General Topology (graduation), Analysis on $\mathbb R^n$ (graduation), Analysis on $\mathbb{R}^n$ II (graduation). 
+	
+	
+\item 	My outreach activities were mainly to attract students to the area of Geometry and Combinatorics, or focused on elementary school students, in order to attract their attention towards Mathematics. The main challenge here was to give them a new view on Mathematics.
+
+\end{innerlist}	
+	
+		
+		
+
+	
+	
+
+
+
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% End CV Document %%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -1,0 +1,665 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%% Simple LaTeX CV Template %%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% NOTE: If you find that it says                                     %%
+%%                                                                    %%
+%%                           1 of ??                                  %%
+%%                                                                    %%
+%% at the bottom of your first page, this means that the AUX file     %%
+%% was not available when you ran LaTeX on this source. Simply RERUN  %%
+%% LaTeX to get the ``??'' replaced with the number of the last page  %%
+%% of the document. The AUX file will be generated on the first run   %%
+%% of LaTeX and used on the second run to fill in all of the          %%
+%% references.                                                        %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% Document Setup %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Don't like 10pt? Try 11pt or 12pt
+\documentclass[10pt]{article}
+
+% This is a helpful package that puts math inside length specifications
+\usepackage{calc,hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb}
+
+
+
+% Simpler bibsection for CV sections
+% (thanks to natbib for inspiration)
+\makeatletter
+\newlength{\bibhang}
+\setlength{\bibhang}{1em}
+\newlength{\bibsep}
+ {\@listi \global\bibsep\itemsep \global\advance\bibsep by\parsep}
+\newenvironment{bibsection}
+    {\minipage[t]{\linewidth}\list{}{%
+        \setlength{\leftmargin}{\bibhang}%
+        \setlength{\itemindent}{-\leftmargin}%
+        \setlength{\itemsep}{\bibsep}%
+        \setlength{\parsep}{\z@}%
+        }}
+    {\endlist\endminipage}
+\makeatother
+
+% Layout: Puts the section titles on left side of page
+\reversemarginpar
+
+%
+%         PAPER SIZE, PAGE NUMBER, AND DOCUMENT LAYOUT NOTES:
+%
+% The next \usepackage line changes the layout for CV style section
+% headings as marginal notes. It also sets up the paper size as either
+% letter or A4. By default, letter was used. If A4 paper is desired,
+% comment out the letterpaper lines and uncomment the a4paper lines.
+%
+% As you can see, the margin widths and section title widths can be
+% easily adjusted.
+%
+% ALSO: Notice that the includefoot option can be commented OUT in order
+% to put the PAGE NUMBER *IN* the bottom margin. This will make the
+% effective text area larger.
+%
+% IF YOU WISH TO REMOVE THE ``of LASTPAGE'' next to each page number,
+% see the note about the +LP and -LP lines below. Comment out the +LP
+% and uncomment the -LP.
+%
+% IF YOU WISH TO REMOVE PAGE NUMBERS, be sure that the includefoot line
+% is uncommented and ALSO uncomment the \pagestyle{empty} a few lines
+% below.
+%
+
+%% Use these lines for letter-sized paper
+\usepackage[paper=letterpaper,
+            %includefoot, % Uncomment to put page number above margin
+            marginparwidth=.9in,     % Length of section titles
+            marginparsep=.05in,       % Space between titles and text
+            margin=.7in,               % 1 inch margins
+            includemp]{geometry}
+
+%% Use these lines for A4-sized paper
+%\usepackage[paper=a4paper,
+%            %includefoot, % Uncomment to put page number above margin
+%            marginparwidth=30.5mm,    % Length of section titles
+%            marginparsep=1.5mm,       % Space between titles and text
+%            margin=25mm,              % 25mm margins
+%            includemp]{geometry}
+
+%% More layout: Get rid of indenting throughout entire document
+\setlength{\parindent}{0in}
+
+%% This gives us fun enumeration environments. compactitem will be nice.
+\usepackage{paralist}
+
+%% Reference the last page in the page number
+%
+% NOTE: comment the +LP line and uncomment the -LP line to have page
+%       numbers without the ``of ##'' last page reference)
+%
+% NOTE: uncomment the \pagestyle{empty} line to get rid of all page
+%       numbers (make sure includefoot is commented out above)
+%
+\usepackage{fancyhdr,lastpage}
+\pagestyle{fancy}
+%\pagestyle{empty}      % Uncomment this to get rid of page numbers
+\fancyhf{}\renewcommand{\headrulewidth}{0pt}
+\fancyfootoffset{\marginparsep+\marginparwidth}
+\newlength{\footpageshift}
+\setlength{\footpageshift}
+          {0.5\textwidth+0.5\marginparsep+0.5\marginparwidth-2in}
+\lfoot{\hspace{\footpageshift}%
+       \parbox{4in}{\, \hfill %
+                    \arabic{page} of \protect\pageref*{LastPage} % +LP
+%                    \arabic{page}                               % -LP
+                    \hfill \,}}
+
+% Finally, give us PDF bookmarks
+\usepackage{color,hyperref}
+\definecolor{darkblue}{rgb}{0.0,0.0,0.3}
+\hypersetup{colorlinks,breaklinks,
+            linkcolor=darkblue,urlcolor=darkblue,
+            anchorcolor=darkblue,citecolor=darkblue}
+
+%%%%%%%%%%%%%%%%%%%%%%%% End Document Setup %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%% Helper Commands %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% The title (name) with a horizontal rule under it
+%
+% Usage: \makeheading{name}
+%
+% Place at top of document. It should be the first thing.
+\newcommand{\makeheading}[1]%
+        {\hspace*{-\marginparsep minus \marginparwidth}%
+         \begin{minipage}[t]{\textwidth+\marginparwidth+\marginparsep}%
+                {\large \bfseries #1}\\[-0.15\baselineskip]%
+                 \rule{\columnwidth}{1pt}%
+         \end{minipage}}
+
+% The section headings
+%
+% Usage: \section{section name}
+%
+% Follow this section IMMEDIATELY with the first line of the section
+% text. Do not put whitespace in between. That is, do this:
+%
+%       \section{My Information}
+%       Here is my information.
+%
+% and NOT this:
+%
+%       \section{My Information}
+%
+%       Here is my information.
+%
+% Otherwise the top of the section header will not line up with the top
+% of the section. Of course, using a single comment character (%) on
+% empty lines allows for the function of the first example with the
+% readability of the second example.
+\renewcommand{\section}[2]%
+        {\pagebreak[2]\vspace{1.3\baselineskip}%
+         \phantomsection\addcontentsline{toc}{section}{#1}%
+         \hspace{0in}%
+         \marginpar{
+         \raggedright \scshape #1}#2}
+
+% An itemize-style list with lots of space between items
+\newenvironment{outerlist}[1][\enskip\textbullet]%
+        {\begin{itemize}[#1]}{\end{itemize}%
+         \vspace{-.6\baselineskip}}
+
+% An environment IDENTICAL to outerlist that has better pre-list spacing
+% when used as the first thing in a \section
+\newenvironment{lonelist}[1][\enskip\textbullet]%
+        {\vspace{-\baselineskip}\begin{list}{#1}{%
+        \setlength{\partopsep}{0pt}%
+        \setlength{\topsep}{0pt}}}
+        {\end{list}\vspace{-.6\baselineskip}}
+
+% An itemize-style list with little space between items
+\newenvironment{innerlist}[1][\enskip\textbullet]%
+        {\begin{compactitem}[#1]}{\end{compactitem}}
+
+% To add some paragraph space between lines.
+% This also tells LaTeX to preferably break a page on one of these gaps
+% if there is a needed pagebreak nearby.
+\newcommand{\blankline}{\quad\pagebreak[2]}
+
+%--- Ignore what follows
+\newcommand{\Ignore}[1]{}
+
+% 
+
+%%%%%%%%%%%%%%%%%%%%%%%% End Helper Commands %%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%% Begin CV Document %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\makeheading{Llohann Dallagnol Speranca}
+
+\section{Address}
+%
+% NOTE: Mind where the & separators and \\ breaks are in the following
+%       table.
+%
+% ALSO: \rcollength is the width of the right column of the table
+%       (adjust it to your liking; default is 1.85in).
+%
+
+%--- Move two lines up then add contact info; this is a bit of a hack; also might want to move up a bit more
+\vspace{-2em}
+\begin{tabbing}
+ Federal University of São Paulo xxxxxxxxxxxxxxl \= \kill
+%\href{http://www.ime.unicamp.br/}
+{Federal University of São Paulo}   \\
+%\href{http://www.unicamp.br/unicamp/}
+{Department of Science and Technology}
+                           \> \textit{Cell:} +55 12 9 9788 7860 \\
+Av. Cesare M. G. Lattes, 1201          \> \textit{E-mail:} {lsperanca@gmail.com, speranca@unifesp.br} \\
+São José dos Campos  – São Paulo          \>  \textit{Nationality:} Brazilian, Italian \\
+12247-014, Brazil 
+\end{tabbing}
+
+		\rule{\columnwidth}{.5pt}%
+
+
+%\section{Citzenship}
+%%
+%Brazilian
+
+
+\section{Research Interests}
+%
+My main interest is in Riemannian geometry, specially in its interplay between topology and curvature of manifolds with symmetry. Recently I have been implementing analytical methods and became interested for them. These includes elliptic PDEs, variational methods and geometric flows. I have also been working in Physics, Mathematical Physics and Combinatorics.
+
+		\rule{\columnwidth}{.5pt}%
+
+
+\section{Education}
+%
+\href{http://ime.unicamp.br/}{\textbf{State University of Campinas}},
+Campinas, Brazil
+
+%\blankline
+\begin{outerlist}
+	
+\item[] Ph.D.,
+        \href{http://www.ime.unicamp.br/}
+             {Mathematics}
+            May 2012
+        \begin{innerlist}
+        \item Thesis Title: \emph{Geometry and Topology of Cobordisms}
+        \item Advisor:
+              \href{http://lattes.cnpq.br/2287909020835559}
+                   {Professor Carlos Durán} and Professor Alcibiades Rigas 
+        \item Area of Study: Differential Topology, Riemannian Geometry
+        \end{innerlist}
+
+%\blankline
+
+\item[] M.S.,
+        \href{http://www.ime.unicamp.br/}
+             {Mathematics}, August 2009
+        \begin{innerlist}
+	\item Dissertation Title: \emph{Exotic Phenomena in Geometry and Topology}
+	\item Advisor:
+	\href{http://lattes.cnpq.br/2287909020835559}
+	{Professor Carlos Durán} 
+	\item Area of Study: Differential Topology, Riemannian Geometry
+\end{innerlist}
+
+%\blankline
+
+\item[] B.S.,
+        \href{http://www.ime.unicamp.br/}
+             {Mathematics}, December 2007
+\end{outerlist}
+
+		\rule{\columnwidth}{.5pt}%
+
+
+\section{Positions}
+%	\item[]
+	 Assistent professor  at the {Federal University of São Paulo},  \hfill Since Spring 2017 \\São José dos Campos, São Paulo, Brazil
+	
+	\blankline
+	
+	Assistent professor  at the {Federal University of Paraná}, \hfill Spring 2014 to Spring 2017\\ Curitiba, Paraná, Brazil
+
+%\blankline
+%
+%Postdoctoral fellow at {State University of Campinas} \hfill Spring 2013 to Spring 2014\\ Campinas, São Paulo, Brazil
+
+\rule{\columnwidth}{.5pt}%
+
+\section{Shor-term positions} \vspace{-1em}
+\begin{innerlist}
+	\item[2018-2019] Visiting Professor at the University of K\"oln, Germany
+	\item[2012-2013] Postdoctoral Researcher for the State of São Paulo at the State University of Campinas
+\end{innerlist}
+\rule{\columnwidth}{.5pt}%
+
+\section{Honors and Awards}
+
+Capes Thesis Award 2021, as the supervisor of the thesis of Leonardo Cavenaghi. This is a prize granted to the best thesis in each scientific area defended in the previous year.
+
+\blankline
+
+Gutierrez Thesis Award 2021, as the supervisor of the thesis of Leonardo Cavenaghi. Prize granted to the best thesis in Mathematics defended in the previous year.
+
+
+\blankline
+
+Postdoctoral grant, Foundation for Research Support of the State of São Paulo (FAPESP), 2012-2013
+
+\blankline
+
+PhD Scholarship, Foundation for Research Support of the State of São Paulo, 2009-2012
+
+\blankline
+
+Masters Scholarship, Foundation for Research Support of the State of São Paulo, 2008-2009
+
+\blankline
+
+Undergraduate Scholarship, Foundation for Research Support of the State of São Paulo, 2008
+
+\blankline
+
+Bronze Medal for the work `Geometric Aspects in Gauge Theory' -- III Journey  on Scientific Initiation, IMPA, Rio de Janeiro, 2006
+
+
+
+\rule{\columnwidth}{.5pt}%
+
+%\newpage
+
+\section{Grants}
+ Support for the event `Advanced Program in Geometry' -- Federal University of Paraná, CAPES 7197/2014-90, CAPES 7891/2014-15, CNPq 466425/2014-7,  PCDP  000076/15, \$4,000 \hfill Summer\,\,2015
+
+\blankline
+
+CNPq Universal Call, project `Riemannian Foliations under positive/nonnegative seccional curvature', 404266/2016-9 , \$4,000, \hfill 2016-2020
+
+\blankline
+
+ FAPESP Research Grant for the project `Geometry and topology under positive/nonnegative sectional curvature', 2017/10892-7, \$3,100, \hfill 2017-2018
+
+\blankline
+
+FAPESP Grant for Research Abroad, project `Classification and global properties of Riemannian foliations', 2017/19657-0, \$42,000, \hfill 2018-2019
+
+
+
+\rule{\columnwidth}{.5pt}%
+
+
+\section{Publications}  \vspace{-1.8em}
+\begin{enumerate}
+	\item Silva, R. M., Sperança, L. D. On the completeness of dual foliations on nonnegatively curved symmetric spaces, \textit{\href{https://arxiv.org/abs/2006.13809}{arxiv:2006.13809}} accepted Revista Matemática Iberoamericana.
+	
+	
+	
+	\item Cavenaghi, L. F., Sperança, L. D. A metric deformation on fiber bundles and applications, \textit{\href{https://arxiv.org/abs/1801.06576}{arxiv:1801.06576}}, accepted Advances in Geometry.
+	
+	
+	\item  Cavenaghi, L. F., Sperança, L. D. On the Geometry of Some Equivariantly Related Manifolds,  
+	\textit{ \href{https://academic.oup.com/imrn/advance-article-abstract/doi/10.1093/imrn/rny268/5194089}{International Mathematics Research
+			Notices, no. 23, 9730–9768, 2020}}.
+	%	\vspace{.1 in}
+	
+	\item Sperança, L. D., Weil, S.  The metric foliations on Euclidean spaces. Math. Z. 295, 1295–1299 2020.
+	
+	
+	
+	\item Sperança, L. D. On Riemannian foliations over positively curved manifolds. \textit{The Journal of Geometric Analysis}, v. 28(3), p. 2206-2224, 2017.
+	%	\vspace{.1 in}  
+	
+	
+	\item Sperança, L. D. Pulling back the Gromoll-Meyer construction and models of exotic spheres. \textit{Proceedings of the American Mathematical Society}, v. 144, p. 3181-3196, 2016.
+	%    \vspace{.1 in}
+	
+	
+	\item Durán, C. E., Sperança, L. D. Rigidity of flat sections on non-negatively curved pullback submersions, \textit{Manuscripta Mathematica}, v. 147, p. 511-525, 2015.
+	%    \vspace{.1 in}
+	
+	
+	\item Sperança, L. D. An identification of the Dirac operator with the parity operator. \textit{International Journal of Modern Physics D},  v. 97, p. 495-497, 2013.
+	%    \vspace{.1 in}
+	
+	
+	
+	\item Sperança L. D. A note on the degree of symmetry of exotic spheres. \textit{Archiv der Mathematik (Printed ed.)},  v. 97, p. 495-497, 2011.
+	%    \vspace{.1 in}  	  
+	
+	
+	\item Durán, C. E. , Rigas, A., Sperança, L. D.  Bootstrapping Ad-equivariant maps, Diffeomorphims and Involutions. \textit{Matematica Contemporanea},  v. 35, p. 27-39, 2008.
+	%    \vspace{.1 in}
+	
+	\item Jardim, M. B., Sperança, L. D. Nonsingular Complex Instantons on Euclidean Spacetime. \textit{International Journal of Geometric Methods in Modern Physics}, v. 05, p. 963, 2008.
+	%    \vspace{.1 in}      
+	
+\end{enumerate}
+\section{Preprints} \vspace{-1.8em}
+\begin{enumerate}
+	
+	
+	\item Cavenaghi, L. F., do Ó, J., Sperança, L. D., The symmetric Kazdan--Warner problem and applications,\textit{\href{https://arxiv.org/abs/2106.14709}{arxiv:2106.14709}}, submitted to Acta Mathematica.
+	
+	
+	\item Sperança, L. D. Totally Geodesic Riemannian Foliations on Compact Lie Groups, \textit{\href{https://arxiv.org/abs/1703.09577}{arxiv:1703.09577}}, submitted to The American Journal of Mathematics.
+	%	\vspace{.1 in}
+	
+	
+	\item Cavenaghi, L. F., Silva, R. M., Sperança, L. D. Positive Ricci curvature through Cheeger deformation,
+	\textit{\href{https://arxiv.org/abs/1810.09725}{arxiv:1810.09725}}, submitted The Journal of Geometric Analysis (with a positive referee report).
+	%	\vspace{.1 in}
+	
+	\item  Mauro, P., Seco, L., Sperança, L. D., On the embeddability of the homogeneous Ricci flow and its collapses, \textit{\href{https://arxiv.org/abs/2107.11612}{arXiv:2107.11612}}. Submitted to Annals of Global Annalisys and Geometry
+	
+	
+	\item Grama, L., Martins, R. M., Patrão, M., Seco, L., Sperança, L. D.
+	Global dynamics of the Ricci flow on flag manifolds with three isotropy summands, \textit{\href{https://arxiv.org/abs/2004.01511}{arxiv:2004.01511}}, submitted to Monatshefte f\"ur Mathematik.
+	
+	
+	\item Blinovsky, V. M., Sperança, L. D., The solution of the complete nontrivial cycle intersection problem for permutations 
+	\textit{\href{	https://arxiv.org/abs/1303.0053}{arxiv:1303.0053}}, submitted to Annals of the Brazilian Mathematical Society.
+	
+	
+	\item Sperança, L. D. An intrinsic curvature condition for submersions over Riemannian manifolds
+	\textit{\href{https://arxiv.org/abs/1706.09211}{arxiv:1706.09211}}.
+	
+%	\item Cavenaghi, L. F., Sperança, L. D. The curvature of convex sum of metrics and applications, \textit{\href{https://arxiv.org/abs/2106.14781}{arxiv:2106.14781}}.
+	
+	%	\vspace{.1 in}
+	
+	
+	
+	
+	
+	
+\end{enumerate}
+\section{In preparation} \vspace{-1.8em}
+\begin{enumerate}
+		\item Cavenaghi, L., Sperança, L. D., On the space of positive scalar curvature metrics with symmetries
+	
+	
+	\item Melo, M. M., Sperança, L. D., Metric deformations via grupoids and collapses
+	
+	\item  Silva, R. M., Sperança, L. D., On the genericity  of  dual foliations with a single leaf
+	
+	
+\end{enumerate}
+
+\rule{\columnwidth}{.5pt}%
+
+
+\section{Book} \vspace{-1.8em}
+\begin{enumerate}
+	\item  Sperança, L. D. Grupos de Lie via exemplos: Topologia, Geometria e Física. ed. Rio de Janeiro SBM 2016 v.1 61p.
+\end{enumerate}
+
+
+
+\rule{\columnwidth}{.5pt}%
+
+
+\section{Invited Talks}
+%
+\textbf{``On the space of PSC metrics with non-abelian symmetry''}
+\begin{innerlist}
+	\item[]- Augsburg-Friburg-Kahrlsruhe A-Fri-Ka Riemannian Topology Seminar (online), 2021
+\end{innerlist}
+
+\textbf{``The projected homogeneous Ricci flow and its Collapses''}
+\begin{innerlist}
+	\item[] Symmetry and Shape, Santiago de Compostela (Spain), 2021
+	\item[] Mathematics Colloquium,  University of Friburg (Switzerland), 2021
+\end{innerlist}
+
+\textbf{``Positive Ricci curvature through Cheeger deformation" }
+\begin{innerlist}
+\item[] XII Summer School, Dynamical Systems section,  University of Brasília (Brazil), 2020
+\end{innerlist}
+
+\blankline
+
+\textbf{``The metric foliations on Euclidean spaces"}
+\begin{innerlist}
+	\item[]- SP Geometry Seminar, State University of Campinas (Brazil), 2020
+\end{innerlist}
+
+
+
+
+\blankline
+
+\textbf{``On the geometry of some equivariantly related manifolds"}
+\begin{innerlist}
+\item[]- Dynamical Systems Seminar, University of Brasília (Brazil), 2020
+\item[]- Oberseminar Topologie, University of Fribourg (Switzerland), 2019
+\item[]- Obeseminar Geometrie, University of Freiburg (Germany), 2019
+\item[]- Geometry Seminar, KU Leuven (Belguim), 2019
+\end{innerlist}
+
+
+
+\blankline
+
+\textbf{``Totally Geodesic Riemannian Foliations on Compact Lie Groups"}
+\begin{innerlist}
+\item[]- AMS Sectional Meeting, University of California at Riverside (USA), 2017
+\item[]- Workshop on Curvature and Global Shape, University of M\"unster (Germany), 2017
+\item[]- Geometry Seminar, IMPA (Brazil), 2017
+\item[]- Symposium on Lie Theory and Applications, State University of Maringá (Brazil), 2016
+\item[]- Geometry Seminar, State University of Campinas (Brazil), 2015
+\end{innerlist}
+
+
+\blankline
+
+\textbf{``Riemannian foliations on positively curved manifolds"}
+\begin{innerlist}
+	\item[]- Dynamical Systems Seminar, University of Brasília (Brazil), 2021
+\item[]- Geometry Seminar, University of K\"oln (Germany), 2019
+\item[]- Oberseminar Geometrie, University of M\"unster (Germany), 2015
+\item[]- Geometry Seminar, University of São Paulo (Brazil), 2015
+\item[]- Geometry Seminar, University of Santa Catarina (Brazil), 2015
+\end{innerlist}
+
+
+\blankline
+
+\textbf{``Lorentz Algebras, Space-time symmetries and Dark-Matter''}
+\begin{innerlist}
+	\item[]- II School  and Workshop in Lie Theory, State University of Maringa (Brazil), 2013
+\end{innerlist}
+
+
+\blankline
+
+\textbf{``Geometric Aspects of Gauge Theory''}
+\begin{innerlist}
+	\item[]- III Journey on Scientific Initiation, IMPA (Brazil), 2006
+\end{innerlist}
+
+
+
+\rule{\columnwidth}{.5pt}%
+
+
+    
+  \section{Students} 
+  \textbf{PhD Thesis}
+  	\begin{innerlist}
+  	\item[2018--2020] Leonardo Francisco Cavenaghi: On metric deformations and applications, University of São Paulo 
+  	\item[2018--2021] Renato J. Moura e Silva: Results on Riemannian foliations, State University of Campinas 
+  	\end{innerlist}
+  
+  \blankline
+  \
+  \hspace{-0.5cm}\textbf{Masters Dissertation}
+  \begin{innerlist}
+  	\item[2013--2014] Aline Zanardini: Dirac Structures and their homotopy classification, Federal University of Paraná 
+  \end{innerlist}
+  
+  \blankline
+  
+  \textbf{Undergraduate Students}
+  \begin{innerlist}
+  	\item[2017-2017]
+  	Hilário Fernandes de Araújo Júnior: Homology and Homotopy in Geometric Topology, Federal University of São Paulo
+  	\item[2016-2016] Felipe Ogima: Introduction to Ordinary Differential Equations, Federal University of Paraná
+  	\item[2016-2016] Luciano Luzzi Junior: Introduction to Fiber Bundles, Federal University of Paraná
+  	\item[2016-2016] Gabriel José Goulart Cardoso: Topology and Geometry in Geometric Quantization, Federal University of Paraná
+  \end{innerlist}
+
+
+\rule{\columnwidth}{.5pt}%
+
+
+\section{Academic Experience (as Instructor)}
+\textbf{\href{http://ime.unicamp.br}{State University of Campinas}}
+\hfill {Summer 2013}
+\begin{innerlist}
+	\item[]- Advanced Linear Algebra (graduation)\hfill  Summer 2013
+\end{innerlist}
+
+\blankline
+
+\textbf{\href{http://www.mat.ufpr.br/}{Federal University of Paraná}}
+\hfill { 2014/02 to 2017/02}
+\begin{innerlist}
+	\item[]- Calculus \hfill Spring 2014, Fall 2015 
+	\item[]- Calculus in multiple variables \hfill Spring 2014, Spring 2016, Fall 2016 
+	\item[]- Linear Algebra \hfill Spring 2015, Fall 2015, Spring 2016 
+	\item[]- Differential Geometry (Math major) \hfill Spring 2014
+	\item[]- Algebraic Topology (Math major) \hfill Fall 2014
+	\item[]- Topics in Geometry/Topology (Math Major) \hfill  Spring 2016
+	\item[]- Advanced Linear Algebra (graduation) \hfill Spring 2015 
+	\item[]- Ordinary Differential Equations (graduation) \hfill  Fall 2016 		
+	\item[]- Geometry and Topology (PhD course on manifolds) \hfill Fall 2014
+	
+\end{innerlist}
+
+\blankline
+
+\textbf{\bfseries\href{https://www.unifesp.br/campus/sjc/}{Federal University of São Paulo}}
+\hfill {2017/02 to Present}
+\begin{innerlist}
+	\item[]- Ordinary Differential Equations \hfill Fall 2019, Fall 2020 (online)
+	\item[]- Calculus in Multiple Variables\hfill  Spring 2019
+	\item[]- Calculus\hfill  Spring 2018; Spring 2020, 2021 (online)
+	\item[]- Metric Spaces (Math major) \hfill Spring 2017 
+	\item[]- Ordinary Differential Equations (Math major) \hfill Fall 2017
+	\item[]- General Topology (graduation) \hfill Fall 2017 
+	\item[]- Advanced Linear Algebra (graduation)\hfill Summer 2018 
+	\item[]- Analysis on $\mathbb{R}^n$ II (graduation) \hfill Spring 2019 \item[]- Analysis on $\mathbb R^n$ (graduation) \hfill Fall 2019
+	%	\item[]- Differential Geometry (Math major): Spring 2014
+	%	\item[]- Algebraic Topology (Math major):Fall 2014
+	%	\item[]- Geometry and Topology (PhD course on manifolds): Fall 2014
+	%	\item[]- Linear Algebra: Spring 2015 (Mechanical Engineering), Fall 2015 (Production Engineering), Spring 2016 (Chemical Engineering)
+	%	\item[]- Topics in Geometry/Topology (Introduction to Riemannian Geometry): Spring 2016
+\end{innerlist}
+
+\rule{\columnwidth}{.5pt}%
+
+\section{Academic and\\ Professional Service}
+%\subsection{Conferences and Workshops} 
+%   	
+\textbf{Organization of events}
+   \begin{innerlist}
+   \item[]- Advanced Summer Program in Geometry, Federal University of Paraná, 2015
+   \item[]- III Geometry Symposium, Federal University of Paraná, 2015
+   \item[]- V Geometry Symposium, Federal University of Paraná, 2017
+   \end{innerlist}
+   
+   \blankline
+   
+   \textbf{Reviewer Service}
+   \begin{innerlist}   
+\item[]- Project Reviewer for The São Paulo Research Foundation (Fapesp)
+   \end{innerlist}
+	 
+	 \blankline
+	 
+	 \textbf{Referee Service}
+		\begin{innerlist}
+   \item[]- Advances in Applied Clifford Algebras
+\item[]- International Journal of Geometric Methods in Modern Physics
+\item[]- SIGMA
+\item[]- Mediterranean Journal of Mathematics
+		\end{innerlist}
+				
+
+%\end{outerlist}
+
+
+
+
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% End CV Document %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
